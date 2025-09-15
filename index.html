@@ -103,11 +103,16 @@
 
     /* 减少动画（系统偏好） */
     @media (prefers-reduced-motion: reduce){ .fade-active{ transition:none } .stars::before, .stars::after, .grid::before{ animation:none } body.horror-mode::after{ animation:none } .loader{ animation:none } .bar>i{ animation:none; width:100% } }
+      /* ===== 全屏动画模式 ===== */
+    body.fx-full .card{ background: transparent; border-color: transparent; box-shadow: none; }
+    body.fx-full .head, body.fx-full .body{ opacity:.08; transition: opacity .3s ease; }
+    body.fx-full .title{ text-shadow:none; }
+    #confetti, #fx, .bg{ will-change: transform, opacity; }
   </style>
 </head>
 <body>
-  <canvas id="confetti"></canvas>
-  <canvas id="fx"></canvas>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <canvas id="fx" aria-hidden="true"></canvas>
   <div class="bg" aria-hidden="true">
     <div class="stars"></div>
     <div class="grid"></div>
@@ -145,6 +150,7 @@
     const panel = document.getElementById('panel');
     const confettiCanvas = document.getElementById('confetti');
     const fxCanvas = document.getElementById('fx');
+    function setFullFX(on){ document.body.classList.toggle('fx-full', !!on); }
 
     let lock = false; let score = 0;
 
@@ -194,14 +200,64 @@
     })();
 
     // ===== 双重确认（恐怖风） =====
-    function confirmTwice(thenDo, resumeScene){ document.body.classList.add('horror-mode'); playHorrorFX(); const box1 = document.createElement('div'); box1.className = 'panel confirm-box'; const t1 = document.createElement('div'); t1.className='ending glitch confirm-title'; t1.dataset.text='你是否确定这个选择？'; t1.textContent='你是否确定这个选择？'; const s1 = document.createElement('div'); s1.className='confirm-sub'; s1.textContent='谨慎：这是一次性试炼，返回可重想，继续将进入最终确认。'; const row1 = document.createElement('div'); row1.className='choices'; const yes1 = btn('继续','danger', ()=>{ playHorrorFX(); const box2 = document.createElement('div'); box2.className='panel confirm-box'; const t2 = document.createElement('div'); t2.className='ending glitch confirm-title'; t2.dataset.text='最后确认：不可撤回！'; t2.textContent='最后确认：不可撤回！'; const s2 = document.createElement('div'); s2.className='confirm-sub'; s2.textContent='再次确认后将锁定答案并执行后续流程。'; const row2 = document.createElement('div'); row2.className='choices'; const yes2 = btn('我确定','danger', ()=>{ interlude(()=>{ document.body.classList.remove('horror-mode'); thenDo(); }, '锁定选择…'); }); const no2 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row2.append(yes2, no2); box2.append(t2, s2, row2); mount(box2); }); const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1); }
+    function confirmTwice(thenDo, resumeScene){
+      document.body.classList.add('horror-mode');
+      setFullFX(true);
+      playHorrorFX();
+      const box1 = document.createElement('div'); box1.className = 'panel confirm-box';
+      const t1 = document.createElement('div'); t1.className='ending glitch confirm-title'; t1.dataset.text='你是否确定这个选择？'; t1.textContent='你是否确定这个选择？';
+      const s1 = document.createElement('div'); s1.className='confirm-sub'; s1.textContent='谨慎：这是一次性试炼，返回可重想，继续将进入最终确认。';
+      const row1 = document.createElement('div'); row1.className='choices';
+      const yes1 = btn('继续','danger', ()=>{
+        playHorrorFX();
+        const box2 = document.createElement('div'); box2.className='panel confirm-box';
+        const t2 = document.createElement('div'); t2.className='ending glitch confirm-title'; t2.dataset.text='最后确认：不可撤回！'; t2.textContent='最后确认：不可撤回！';
+        const s2 = document.createElement('div'); s2.className='confirm-sub'; s2.textContent='再次确认后将锁定答案并执行后续流程。';
+        const row2 = document.createElement('div'); row2.className='choices';
+        const yes2 = btn('我确定','danger', ()=>{ interlude(()=>{ document.body.classList.remove('horror-mode'); thenDo(); }, '锁定选择…'); });
+        const no2 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); setFullFX(false); resumeScene(); });
+        row2.append(yes2, no2); box2.append(t2, s2, row2); mount(box2);
+      });
+      const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); setFullFX(false); resumeScene(); });
+      row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1);
+    }, '锁定选择…'); }); const no2 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row2.append(yes2, no2); box2.append(t2, s2, row2); mount(box2); }); const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1); }
 
-    function sceneEndHorror(text, sub, pts=0, stage=1){ document.body.classList.add('horror-mode'); const box = mk('div', {className:'panel'}); const big = mk('div', {className:'ending glitch no-select'}); big.dataset.text = text; big.textContent = text; box.append(big); if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub)); const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc); const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q); mount(box); playHorrorFX(); bloodFX.burst(); }
+    function sceneEndHorror(text, sub, pts=0, stage=1){
+      setFullFX(true);
+      document.body.classList.add('horror-mode');
+      const box = mk('div', {className:'panel'});
+      const big = mk('div', {className:'ending glitch no-select'});
+      big.dataset.text = text; big.textContent = text; box.append(big);
+      if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub));
+      const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc);
+      const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q);
+      mount(box);
+      // 全屏恐怖特效
+      playHorrorFX();
+      bloodFX.burst();
+    }); const big = mk('div', {className:'ending glitch no-select'}); big.dataset.text = text; big.textContent = text; box.append(big); if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub)); const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc); const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q); mount(box); playHorrorFX(); bloodFX.burst(); }
 
-    function sceneFinalWin(){ document.body.classList.remove('horror-mode'); const box=mk('div',{className:'panel'}); const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！'); box.append(big); mount(box); conf.launch(4); playWinFX(); }
+    function sceneFinalWin(){
+      setFullFX(true);
+      document.body.classList.remove('horror-mode');
+      const box=mk('div',{className:'panel'});
+      const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！');
+      box.append(big); mount(box);
+      // 全屏礼花 & 提示音
+      conf.launch(5);
+      playWinFX();
+    }); const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！'); box.append(big); mount(box); conf.launch(4); playWinFX(); }
 
     // ===== 场景（题目树） =====
-    function sceneStart(){ document.body.classList.remove('horror-mode'); score=0; const box=mk('div',{className:'panel'}); box.append(btn('确定','ok',()=> interlude(sceneQ1,'启动友情试炼…'))); mount(box); }
+    function sceneStart(){
+      // 进入普通模式
+      setFullFX(false);
+      document.body.classList.remove('horror-mode');
+      score=0;
+      const box=mk('div',{className:'panel'});
+      box.append(btn('确定','ok',()=> interlude(sceneQ1,'启动友情试炼…')));
+      mount(box);
+    }); box.append(btn('确定','ok',()=> interlude(sceneQ1,'启动友情试炼…'))); mount(box); }
 
     function sceneQ1(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='问题 1/5 · 我是你兄弟吗？'; const box=mk('div',{className:'panel'}); box.append(mk('p',{className:'subtitle'},'请选择你的真实想法：')); box.append(choiceButtons([
       {label:'1. 是',type:'ok',onClick:()=> confirmTwice(()=>sceneQ2(), sceneQ1)},

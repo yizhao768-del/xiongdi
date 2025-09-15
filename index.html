@@ -134,6 +134,14 @@
   </main>
 
   <script>
+    // ===== Fix: provide a safe shim so any unexpected calls won't crash =====
+    if (typeof window.invoke === 'undefined') {
+      window.invoke = function(...args){
+        console.warn('[shim] window.invoke() was called but no implementation is provided. Args:', args);
+        return null;
+      };
+    }
+
     const panel = document.getElementById('panel');
     const confettiCanvas = document.getElementById('confetti');
     const fxCanvas = document.getElementById('fx');
@@ -220,6 +228,22 @@
     function sceneQ5(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='最终问题 · 友情是否坚固？'; const box=mk('div',{className:'panel only-btn'}); const ask=mk('p',{className:'subtitle'},'去叫我 10 声 爸爸，有意想不到的惊喜，我们的友谊是否坚固，就看你了。'); const go=btn('我现在就去叫','ok',()=> interlude(sceneFinalWin,'核验完成度 100%…')); box.append(ask,go); mount(box); }
 
     sceneStart();
+
+    // ===== Minimal Self-tests (do not change app behavior) =====
+    ;(function runSelfTests(){
+      try {
+        console.groupCollapsed('%c[SelfTest] 开始', 'color:#0ff');
+        console.assert(typeof window.invoke === 'function', 'invoke shim 存在');
+        console.assert(typeof sceneStart === 'function', 'sceneStart 存在');
+        console.assert(typeof sceneQ1 === 'function' && typeof sceneQ2 === 'function', '题目场景函数存在');
+        // 运行一次起始场景不应抛错
+        sceneStart();
+        console.log('[SelfTest] 场景渲染 OK');
+        console.groupEnd();
+      } catch(e){
+        console.error('[SelfTest] 失败：', e);
+      }
+    })();
   </script>
 </body>
 </html>

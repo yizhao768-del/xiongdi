@@ -11,18 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@400;600;700&family=Monoton&family=Black+Ops+One&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#05060a;
-      --card:#0b0f1a;
-      --muted:#93a4c4;
-      --fg:#e6f0ff;
-      --acc:#00e0ff;
-      --acc2:#7b61ff;
-      --danger:#ff3b3b;
-      --ok:#00ffa6;
-      --shadow: 0 10px 30px rgba(0, 224, 255, .25), 0 0 40px rgba(123,97,255,.15);
-      --radius: 18px;
-    }
+    :root { --bg:#05060a; --card:#0b0f1a; --muted:#93a4c4; --fg:#e6f0ff; --acc:#00e0ff; --acc2:#7b61ff; --danger:#ff3b3b; --ok:#00ffa6; --shadow: 0 10px 30px rgba(0, 224, 255, .25), 0 0 40px rgba(123,97,255,.15); --radius: 18px; }
     * { box-sizing: border-box; }
     html,body{ height:100%; }
     body{ margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, PingFang SC, Microsoft YaHei, Noto Sans CJK SC, sans-serif; color:var(--fg); background:var(--bg); overflow:hidden; }
@@ -59,9 +48,7 @@
     .btn.danger{ background: linear-gradient(180deg, #ff7b7b, #ff3b3b); --glow: rgba(255,59,59,.45); color:#2a0000; }
     .btn.ok{ background: linear-gradient(180deg, #7bffd6, #00ffa6); --glow: rgba(0,255,166,.4); color:#00281c; }
 
-    .footer{ display:flex; justify-content:space-between; align-items:center; padding: 14px 18px; border-top:1px solid rgba(255,255,255,.06); color: #a9b7d6; font-size:12px; }
-    .footer .left{ display:flex; gap:8px; align-items:center; }
-    .chip{ padding:6px 10px; border-radius:999px; border:1px solid rgba(0,224,255,.35); background:rgba(6,14,22,.5); color:#bfeaff; font-weight:600; font-size:12px; letter-spacing:.3px; }
+    .footer{ display:none; }
 
     /* 过场动画 */
     .fade-enter{ opacity:0; transform: translateY(6px) scale(.99); filter: blur(.8px); }
@@ -71,15 +58,25 @@
     .ending{ padding: 10px 0 6px; font-weight:700; font-size: clamp(22px, 4.5vw, 36px); line-height:1.25; text-align:center; background: linear-gradient(180deg, #fff 20%, #b6eaff 80%); -webkit-background-clip:text; color:transparent; text-shadow: 0 8px 32px rgba(0,224,255,.25); }
     .ending small{ display:block; margin-top:8px; font-weight:500; font-size: 14px; color: var(--muted); }
 
-    /* ===== 恐怖结局 & 艺术字体样式 ===== */
-    body.horror-mode .bg{background: radial-gradient(1000px 500px at 50% -10%, rgba(255,0,54,.15), transparent 60%), radial-gradient(800px 480px at 0% 110%, rgba(255,0,0,.16), transparent 60%), linear-gradient(180deg,#070306,#0a0203);}    
-    body.horror-mode .card{border-color: rgba(255,0,54,.5); box-shadow: 0 10px 30px rgba(255,0,54,.25), 0 0 40px rgba(255,0,0,.15);}    
-    .glitch{ position:relative; text-transform:uppercase; letter-spacing:.5px; }
-    .glitch::before, .glitch::after{ content: attr(data-text); position:absolute; left:0; right:0; top:0; color:#ff2a2a; opacity:.9; mix-blend-mode:screen; }
-    .glitch::before{ transform:translate(1px,0); animation:gl1 1.2s infinite linear alternate-reverse; }
-    .glitch::after{ color:#00e0ff; transform:translate(-1px,0); animation:gl2 1.1s infinite linear alternate; }
+    /* ===== 恐怖结局 & 艺术字体样式（强化） ===== */
+    body.horror-mode .bg{ background:
+      radial-gradient(1000px 500px at 50% -10%, rgba(255,0,54,.22), transparent 60%),
+      radial-gradient(800px 480px at 0% 110%, rgba(255,0,0,.22), transparent 60%),
+      linear-gradient(180deg,#070306,#0a0203); }
+    body.horror-mode .card{ border-color: rgba(255,0,54,.6); box-shadow: 0 12px 38px rgba(255,0,54,.35), 0 0 50px rgba(255,0,0,.22); animation: hshake .45s ease-in-out 1; }
+    @keyframes hshake{ 0%{transform:translateX(0)} 20%{transform:translateX(-2px)} 40%{transform:translateX(2px)} 60%{transform:translateX(-1px)} 80%{transform:translateX(1px)} 100%{transform:translateX(0)} }
+    body.horror-mode::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:3; background:
+      radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,.35) 90%),
+      repeating-linear-gradient(0deg, rgba(255,0,30,.08) 0 2px, rgba(0,0,0,0) 2px 4px);
+      animation: flick 1.2s steps(2,end) infinite; mix-blend-mode:multiply; }
+    @keyframes flick{ 0%,100%{opacity:.85; filter:hue-rotate(0)} 50%{opacity:1; filter:hue-rotate(-10deg) brightness(1.05)} }
+    .glitch{ position:relative; text-transform:uppercase; letter-spacing:.5px; filter: drop-shadow(0 0 10px rgba(255,0,40,.35)); }
+    .glitch::before, .glitch::after{ content: attr(data-text); position:absolute; left:0; right:0; top:0; opacity:.95; mix-blend-mode:screen; }
+    .glitch::before{ color:#ff2a2a; transform:translate(1.2px,0); animation:gl1 1s infinite linear alternate-reverse; }
+    .glitch::after{ color:#00e0ff; transform:translate(-1.2px,0); animation:gl2 .95s infinite linear alternate; }
     @keyframes gl1{ 0%{clip-path: inset(0 0 80% 0)} 50%{clip-path: inset(20% 0 40% 0)} 100%{clip-path: inset(60% 0 0 0)} }
     @keyframes gl2{ 0%{clip-path: inset(60% 0 0 0)} 50%{clip-path: inset(20% 0 40% 0)} 100%{clip-path: inset(0 0 80% 0)} }
+
     .score{ display:inline-block; margin-top:10px; padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); font-weight:700; }
     .art100{ font-family: Monoton, 'Black Ops One', Orbitron, sans-serif; font-size: clamp(28px, 8vw, 72px); line-height:1.05; letter-spacing:1px; text-align:center; background:linear-gradient(180deg,#fff,#a1e4ff 60%,#7b61ff); -webkit-background-clip:text; color:transparent; text-shadow: 0 12px 40px rgba(0,224,255,.35), 0 0 80px rgba(123,97,255,.25);}  
     .only-btn{ display:grid; gap:14px; justify-items:center; }
@@ -88,8 +85,22 @@
     /* 粒子礼花层 */
     #confetti{ position:fixed; inset:0; pointer-events:none; z-index:2; }
 
+    /* ===== 过场等待：加载圈 + 进度条 ===== */
+    .interlude{ display:grid; gap:14px; justify-items:center; padding:16px 0; }
+    .loader{ width:42px; height:42px; border-radius:50%; border:3px solid rgba(255,255,255,.18); border-top-color: #aee9ff; animation: spin 1s linear infinite; filter: drop-shadow(0 0 10px rgba(0,224,255,.25)); }
+    @keyframes spin{ to{ transform: rotate(360deg) } }
+    .bar{ width: 100%; height:6px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+    .bar>i{ display:block; width:0%; height:100%; background: linear-gradient(90deg, var(--acc), var(--acc2)); animation: grow var(--t,1200ms) ease-out forwards; }
+    @keyframes grow{ from{ width:0% } to{ width:100% } }
+    .il-text{ color:#bfeaff; font-size:13px; opacity:.9; letter-spacing:.3px; }
+
+    /* ===== 双重确认（恐怖风） ===== */
+    .confirm-box{ display:grid; gap:14px; justify-items:center; text-align:center; padding:8px 0 10px; }
+    .confirm-title{ font-weight:800; font-size: clamp(18px, 3.6vw, 24px); letter-spacing:.5px; }
+    .confirm-sub{ color:#ffb7b7; font-size:13px; opacity:.9; }
+
     /* 减少动画（系统偏好） */
-    @media (prefers-reduced-motion: reduce){ .fade-active{ transition:none } .stars::before, .stars::after, .grid::before{ animation:none } }
+    @media (prefers-reduced-motion: reduce){ .fade-active{ transition:none } .stars::before, .stars::after, .grid::before{ animation:none } body.horror-mode::after{ animation:none } .loader{ animation:none } .bar>i{ animation:none; width:100% } }
   </style>
 </head>
 <body>
@@ -102,13 +113,8 @@
     <section class="card" role="dialog" aria-modal="true" aria-labelledby="title">
       <header class="head">
         <div class="brand" aria-label="友情勋章">
-          <!-- 兄弟友情图案：拳头碰拳（SVG自绘，无版权） -->
           <svg viewBox="0 0 64 64" aria-hidden="true">
-            <defs>
-              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#7b61ff"/>
-              </linearGradient>
-            </defs>
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#7b61ff"/></linearGradient></defs>
             <path d="M28 22c3-6 9-6 12-2l3 4 4-1c6 0 9 10 1 13l-7 3-3 5c-2 3-7 3-9-1l-2-4-5 1c-6 1-10-7-5-12l3-3 8-3z" fill="url(#g1)" opacity=".95"/>
             <path d="M17 28l5-2m4-2l4-1m8 0l4 1m4 2l3 2" stroke="#bfeaff" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
           </svg>
@@ -117,244 +123,100 @@
       </header>
       <div class="body">
         <h1 id="title" class="title no-select">我的 bro，你准备好了吗？</h1>
-        <p class="subtitle no-select"><strong>只有一次机会，请你认真思考！</strong> Ready Player Bro · 进入友情抉择试炼。手机端已优化，点击下方按钮开始。</p>
+        <p class="subtitle no-select"><strong>只有一次机会，请你认真思考！</strong></p>
         <div id="panel" class="panel"></div>
       </div>
-      <div class="footer">
-        <div class="left">
-          <span class="chip">v1.3</span>
-          <span>一次机会 · 科幻/恐怖双风格 · 单文件部署</span>
-        </div>
-      </div>
+      <div class="footer" aria-hidden="true"></div>
     </section>
   </main>
 
   <script>
-    // ============ 状态与工具 ============
     const panel = document.getElementById('panel');
     const confettiCanvas = document.getElementById('confetti');
 
-    // 防重复点击（移动端稳定性）
-    let lock = false; let score = 0; // 失败得分累计
+    let lock = false; let score = 0;
 
-    // 更多失败语录（随机，从不删除）
     const failureQuotes = {
-      1:[
-        '第1关折戟，兄弟之路还没开始就结束了。',
-        '你没把我当兄弟，我却记住了这一天。',
-        '友情校验失败：真诚连接未建立。',
-        '起点就拐弯，终点也就不必等。',
-        '你后退一步，我便退无可退。'
-      ],
-      2:[
-        '爱情与友情的天平偏了，水下的手终究没握住。',
-        '你救她没错，但我们也到此为止了。',
-        '友情断链：紧急脱离程序已执行。',
-        '你选择了她，我选择了沉默。',
-        '水面平静，心底已生分岔口。'
-      ],
-      3:[
-        '24小时的陪伴太重？原来我们的故事只到这里。',
-        '我会学会独行，你也别回头。',
-        '守护协议未签署：照护权限拒绝。',
-        '不怪你，只怪承诺太轻。',
-        '我把孤独签收，你把承诺退回。'
-      ],
-      4:[
-        '界限与欲望的答卷，只换来一句冷风。',
-        '玩笑开到尽头，友情不再发光。',
-        '尊重与默契失联：链接中断。',
-        '话开过了头，心就找不到位置了。',
-        '我收回笑场，你收回轻狂。'
-      ]
+      1:['第1关折戟，兄弟之路还没开始就结束了。','你没把我当兄弟，我却记住了这一天。','友情校验失败：真诚连接未建立。','起点就拐弯，终点也就不必等。','你后退一步，我便退无可退。'],
+      2:['爱情与友情的天平偏了，水下的手终究没握住。','你救她没错，但我们也到此为止了。','友情断链：紧急脱离程序已执行。','你选择了她，我选择了沉默。','水面平静，心底已生分岔口。'],
+      3:['24小时的陪伴太重？原来我们的故事只到这里。','我会学会独行，你也别回头。','守护协议未签署：照护权限拒绝。','不怪你，只怪承诺太轻。','我把孤独签收，你把承诺退回。'],
+      4:['界限与欲望的答卷，只换来一句冷风。','玩笑开到尽头，友情不再发光。','尊重与默契失联：链接中断。','话开过了头，心就找不到位置了。','我收回笑场，你收回轻狂。']
     };
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
 
-    // 防抖包装
-    function guard(fn){ return (...args)=>{ if(lock) return; lock = true; try { requestAnimationFrame(()=>{ fn(...args); setTimeout(()=>lock=false, 240); }); } catch(e){ lock=false; console.error(e);} }; }
+    function guard(fn){ return (...args)=>{ if(lock) return; lock = true; try{ requestAnimationFrame(()=>{ fn(...args); setTimeout(()=>lock=false, 260); }); }catch(e){ lock=false; console.error(e); } }; }
 
     function mount(el){ el.classList.add('fade-enter'); panel.replaceChildren(el); requestAnimationFrame(()=> el.classList.add('fade-active')); }
+    function mk(tag, props={}, ...children){ const el=document.createElement(tag); Object.assign(el, props); for(const c of children){ if(c==null) continue; el.append(c.nodeType? c : document.createTextNode(c)); } return el; }
+    function btn(label, cls, handler){ const b=mk('button',{className:`btn ${cls||''}`,type:'button'},label); b.addEventListener('click', guard(handler), {passive:true}); return b; }
+    function choiceButtons(opts){ const wrap=mk('div',{className:'choices'}); for(const o of opts){ wrap.append(btn(o.label,o.type||'',o.onClick)); } return wrap; }
 
-    function mk(tag, props={}, ...children){ const el = document.createElement(tag); Object.assign(el, props); for(const c of children){ if(c==null) continue; el.append(c.nodeType? c : document.createTextNode(c)); } return el; }
+    // ===== 过场等待：统一封装 =====
+    function interlude(next, text){ const ms = 900 + Math.floor(Math.random()*700); const box = mk('div', {className:'panel interlude'}); const t = mk('div', {className:'il-text'}, text || '链接兄弟协议中…'); const spin = mk('div', {className:'loader'}); const bar = mk('div', {className:'bar'}); const fill = mk('i'); fill.style.setProperty('--t', ms+'ms'); bar.append(fill); box.append(spin, bar, t); mount(box); setTimeout(()=>{ next(); }, ms); }
 
-    function btn(label, cls, handler){ const b = mk('button', {className:`btn ${cls||''}`, type:'button'}, label); b.addEventListener('click', guard(handler), {passive:true}); return b; }
-
-    function choiceButtons(opts){ const wrap = mk('div', {className:'choices'}); for(const o of opts){ wrap.append(btn(o.label, o.type||'', o.onClick)); } return wrap; }
-
-    // ============ 轻微音效 + 震动（恐怖结局） ============
+    // 音效+震动（恐怖结局/确认强化）
     let audioCtx; function getCtx(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx }
-    function playHorrorFX(){
-      const ctx = getCtx();
-      // 如果系统要求减少动画或无音频上下文，优雅降级
-      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(!ctx || reduce) { try{ navigator.vibrate && navigator.vibrate([60,40,60]); }catch(_){} return; }
-      // 震动
-      try{ navigator.vibrate && navigator.vibrate([80,40,80]); }catch(_){}
-      // 合成一段短促的失真噪声 + 低频咆哮
-      const t0 = ctx.currentTime;
-      const dur = .35;
-      // 噪声
-      const buffer = ctx.createBuffer(1, ctx.sampleRate*dur, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1) * (1 - i/data.length); }
-      const noise = ctx.createBufferSource(); noise.buffer = buffer;
-      const filt = ctx.createBiquadFilter(); filt.type='highpass'; filt.frequency.value=800;
-      const gain = ctx.createGain(); gain.gain.setValueAtTime(0.3, t0); gain.gain.exponentialRampToValueAtTime(0.01, t0+dur);
-      noise.connect(filt).connect(gain).connect(ctx.destination); noise.start();
-      // 低频
-      const osc = ctx.createOscillator(); osc.type='sawtooth'; osc.frequency.setValueAtTime(110, t0); osc.frequency.exponentialRampToValueAtTime(55, t0+dur);
-      const g2 = ctx.createGain(); g2.gain.setValueAtTime(0.2, t0); g2.gain.exponentialRampToValueAtTime(0.01, t0+dur);
-      osc.connect(g2).connect(ctx.destination); osc.start(); osc.stop(t0+dur);
-      noise.stop(t0+dur);
-    }
+    function playHorrorFX(){ const ctx=getCtx(); const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; try{ navigator.vibrate && navigator.vibrate([120,60,120,60,80]); }catch(_){} if(!ctx || reduce) return; const t0=ctx.currentTime, dur=.45; const buffer=ctx.createBuffer(1, ctx.sampleRate*dur, ctx.sampleRate); const data=buffer.getChannelData(0); for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1) * (1 - i/data.length); } const noise=ctx.createBufferSource(); noise.buffer=buffer; const filt=ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=900; filt.Q.value=0.6; const g=ctx.createGain(); g.gain.setValueAtTime(0.35,t0); g.gain.exponentialRampToValueAtTime(0.01,t0+dur); noise.connect(filt).connect(g).connect(ctx.destination); noise.start(); noise.stop(t0+dur); const osc=ctx.createOscillator(); osc.type='triangle'; osc.frequency.setValueAtTime(120,t0); osc.frequency.exponentialRampToValueAtTime(50,t0+dur); const g2=ctx.createGain(); g2.gain.setValueAtTime(0.22,t0); g2.gain.exponentialRampToValueAtTime(0.01,t0+dur); osc.connect(g2).connect(ctx.destination); osc.start(); osc.stop(t0+dur); }
 
-    // ============ 粒子礼花（成功100分） ============
-    const confetti = (()=>{
-      const c = confettiCanvas; const ctx = c.getContext('2d');
-      const DPR = Math.max(1, Math.min(2, window.devicePixelRatio||1));
-      let w=0,h=0, parts=[], rafId=null, t0=0;
-      function resize(){ const bb = c.getBoundingClientRect(); w=bb.width; h=bb.height; c.width = Math.floor(w*DPR); c.height = Math.floor(h*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
-      window.addEventListener('resize', resize);
-      resize();
-      function launch(){
-        parts = []; const N = 160;
-        for(let i=0;i<N;i++){
-          parts.push({
-            x: w/2 + (Math.random()-0.5)*60,
-            y: h*0.35 + (Math.random()-0.5)*40,
-            vx: (Math.random()-0.5)* (4 + Math.random()*4),
-            vy: -(3 + Math.random()*5),
-            g: 0.12 + Math.random()*0.08,
-            s: 2 + Math.random()*3,
-            a: 1,
-            r: Math.random()*Math.PI,
-            rot: (Math.random()-0.5)*0.2,
-            shape: Math.random()<0.5?'rect':'circle'
-          });
-        }
-        if(rafId) cancelAnimationFrame(rafId); t0 = performance.now();
-        draw();
-      }
-      function draw(now){
-        rafId = requestAnimationFrame(draw);
-        ctx.clearRect(0,0,w,h);
-        for(const p of parts){
-          p.x += p.vx; p.y += p.vy; p.vy += p.g; p.r += p.rot; p.a *= 0.995;
-          ctx.globalAlpha = Math.max(0, Math.min(1, p.a));
-          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
-          if(p.shape==='rect'){ ctx.fillRect(-p.s, -p.s, p.s*2, p.s*2); }
-          else { ctx.beginPath(); ctx.arc(0,0,p.s,0,Math.PI*2); ctx.fill(); }
-          ctx.restore();
-        }
-        // 自动停止
-        if(performance.now()-t0>3000){ cancelAnimationFrame(rafId); rafId=null; ctx.clearRect(0,0,w,h); }
-      }
-      return { launch };
-    })();
+    // 粒子礼花
+    const confetti = (()=>{ const c=confettiCanvas, ctx=c.getContext('2d'); const DPR=Math.max(1, Math.min(2, window.devicePixelRatio||1)); let w=0,h=0, parts=[], rafId=null, t0=0; function resize(){ const bb=c.getBoundingClientRect(); w=bb.width; h=bb.height; c.width=Math.floor(w*DPR); c.height=Math.floor(h*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);} window.addEventListener('resize',resize); resize(); function launch(){ parts=[]; const N=180; for(let i=0;i<N;i++){ parts.push({ x:w/2+(Math.random()-0.5)*60, y:h*0.35+(Math.random()-0.5)*40, vx:(Math.random()-0.5)*(4+Math.random()*4), vy:-(3+Math.random()*5), g:0.12+Math.random()*0.08, s:2+Math.random()*3, a:1, r:Math.random()*Math.PI, rot:(Math.random()-0.5)*0.2, shape:Math.random()<0.5?'rect':'circle' }); } if(rafId) cancelAnimationFrame(rafId); t0=performance.now(); draw(); } function draw(){ rafId=requestAnimationFrame(draw); ctx.clearRect(0,0,w,h); for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=p.rot; p.a*=0.995; ctx.globalAlpha=Math.max(0,Math.min(1,p.a)); ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); if(p.shape==='rect'){ ctx.fillRect(-p.s,-p.s,p.s*2,p.s*2);} else { ctx.beginPath(); ctx.arc(0,0,p.s,0,Math.PI*2); ctx.fill(); } ctx.restore(); } if(performance.now()-t0>3000){ cancelAnimationFrame(rafId); rafId=null; ctx.clearRect(0,0,w,h);} } return { launch }; })();
 
-    // ============ 结束场景 ============
-    function sceneEndHorror(text, sub, pts=0, stage=1){
+    // ===== 双重确认（恐怖风） =====
+    function confirmTwice(thenDo, resumeScene){
+      // 第一次确认
       document.body.classList.add('horror-mode');
-      const box = mk('div', {className:'panel'});
-      const big = mk('div', {className:'ending glitch no-select'});
-      big.dataset.text = text; big.textContent = text;
-      box.append(big);
-      if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub));
-      const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`);
-      box.append(sc);
-      const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…']));
-      box.append(q);
-      mount(box);
       playHorrorFX();
+      const box1 = document.createElement('div');
+      box1.className = 'panel confirm-box';
+      const t1 = document.createElement('div'); t1.className='ending glitch confirm-title'; t1.dataset.text='你是否确定这个选择？'; t1.textContent='你是否确定这个选择？';
+      const s1 = document.createElement('div'); s1.className='confirm-sub'; s1.textContent='谨慎：这是一次性试炼，返回可重想，继续将进入最终确认。';
+      const row1 = document.createElement('div'); row1.className='choices';
+      const yes1 = btn('继续','danger', ()=>{
+        // 第二次确认
+        playHorrorFX();
+        const box2 = document.createElement('div'); box2.className='panel confirm-box';
+        const t2 = document.createElement('div'); t2.className='ending glitch confirm-title'; t2.dataset.text='最后确认：不可撤回！'; t2.textContent='最后确认：不可撤回！';
+        const s2 = document.createElement('div'); s2.className='confirm-sub'; s2.textContent='再次确认后将锁定答案并执行后续流程。';
+        const row2 = document.createElement('div'); row2.className='choices';
+        const yes2 = btn('我确定','danger', ()=>{ interlude(()=>{ document.body.classList.remove('horror-mode'); thenDo(); }, '锁定选择…'); });
+        const no2 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); });
+        row2.append(yes2, no2); box2.append(t2, s2, row2); mount(box2);
+      });
+      const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); });
+      row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1);
     }
 
-    function sceneFinalWin(){
-      document.body.classList.remove('horror-mode');
-      const box = mk('div', {className:'panel'});
-      const big = mk('div', {className:'art100 no-select'}, '100分！！！好兄弟一辈子！！！');
-      box.append(big);
-      mount(box);
-      confetti.launch();
-    }
+    function sceneEndHorror(text, sub, pts=0, stage=1){ document.body.classList.add('horror-mode'); const box = mk('div', {className:'panel'}); const big = mk('div', {className:'ending glitch no-select'}); big.dataset.text = text; big.textContent = text; box.append(big); if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub)); const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc); const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q); mount(box); playHorrorFX(); }
 
-    // ============ 场景（题目树） ============
-    function sceneStart(){ document.body.classList.remove('horror-mode'); score = 0; const box = mk('div', {className:'panel'}); box.append(btn('确定', 'ok', sceneQ1)); mount(box); }
+    function sceneFinalWin(){ document.body.classList.remove('horror-mode'); const box=mk('div',{className:'panel'}); const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！'); box.append(big); mount(box); confetti.launch(); }
 
-    // Q1
-    function sceneQ1(){
-      document.body.classList.remove('horror-mode');
-      document.querySelector('.title').textContent = '问题 1/5 · 我是你兄弟吗？';
-      const box = mk('div', {className:'panel'});
-      box.append(mk('p', {className:'subtitle'}, '请选择你的真实想法：'));
-      box.append(choiceButtons([
-        { label:'1. 是', type:'ok', onClick: sceneQ2 },
-        { label:'2. 否', type:'danger', onClick: ()=> { score = 20; sceneEndHorror('你可以去死了', '仪式终止。', score, 1); } }
-      ]));
-      mount(box);
-    }
+    // ===== 场景（题目树） =====
+    function sceneStart(){ document.body.classList.remove('horror-mode'); score=0; const box=mk('div',{className:'panel'}); box.append(btn('确定','ok',()=> interlude(sceneQ1,'启动友情试炼…'))); mount(box); }
 
-    // Q2
-    function sceneQ2(){
-      document.body.classList.remove('horror-mode');
-      document.querySelector('.title').textContent = '问题 2/5 · 你女朋友和我一起落水你救谁？';
-      const box = mk('div', {className:'panel'});
-      box.append(mk('p', {className:'subtitle'}, '友情 or 爱情，二选一。'));
-      box.append(choiceButtons([
-        { label:'1. 救我', type:'ok', onClick: sceneQ3 },
-        { label:'2. 女朋友', type:'danger', onClick: ()=> { score = 40; sceneEndHorror('我们绝交吧', '选择已确认。', score, 2); } }
-      ]));
-      mount(box);
-    }
+    function sceneQ1(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='问题 1/5 · 我是你兄弟吗？'; const box=mk('div',{className:'panel'}); box.append(mk('p',{className:'subtitle'},'请选择你的真实想法：')); box.append(choiceButtons([
+      {label:'1. 是',type:'ok',onClick:()=> confirmTwice(()=>sceneQ2(), sceneQ1)},
+      {label:'2. 否',type:'danger',onClick:()=> confirmTwice(()=>{ score=20; sceneEndHorror('你可以去死了','仪式终止。',score,1); }, sceneQ1)}
+    ])); mount(box); }
 
-    // Q3
-    function sceneQ3(){
-      document.body.classList.remove('horror-mode');
-      document.querySelector('.title').textContent = '问题 3/5 · 如果我出现需要24小时照顾的残疾，你愿意照顾我吗？';
-      const box = mk('div', {className:'panel'});
-      box.append(mk('p', {className:'subtitle'}, '只有你可以照顾我，但需要 24 小时。'));
-      box.append(choiceButtons([
-        { label:'1. 愿意', type:'ok', onClick: sceneQ4 },
-        { label:'2. 不愿意', type:'danger', onClick: ()=> { score = 60; sceneEndHorror('没关系我不怪你', '我们感情不到位罢了。', score, 3); } }
-      ]));
-      mount(box);
-    }
+    function sceneQ2(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='问题 2/5 · 你女朋友和我一起落水你救谁？'; const box=mk('div',{className:'panel'}); box.append(mk('p',{className:'subtitle'},'友情 or 爱情，二选一。')); box.append(choiceButtons([
+      {label:'1. 救我',type:'ok',onClick:()=> confirmTwice(()=>sceneQ3(), sceneQ2)},
+      {label:'2. 女朋友',type:'danger',onClick:()=> confirmTwice(()=>{ score=40; sceneEndHorror('我们绝交吧','选择已确认。',score,2); }, sceneQ2)}
+    ])); mount(box); }
 
-    // Q4
-    function sceneQ4(){
-      document.body.classList.remove('horror-mode');
-      document.querySelector('.title').textContent = '问题 4/5 · 如果我是女的，愿不愿意和我上床？';
-      const box = mk('div', {className:'panel'});
-      box.append(mk('p', {className:'subtitle'}, '认真思考后再作答。'));
-      box.append(choiceButtons([
-        { label:'1. 愿意', type:'ok', onClick: sceneQ5Gate },
-        { label:'2. 不愿意', type:'danger', onClick: ()=> { score = 80; sceneEndHorror('我是不是给你脸了？', '仪式终止。', score, 4); } }
-      ]));
-      mount(box);
-    }
+    function sceneQ3(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='问题 3/5 · 如果我出现需要24小时照顾的残疾，你愿意照顾我吗？'; const box=mk('div',{className:'panel'}); box.append(mk('p',{className:'subtitle'},'只有你可以照顾我，但需要 24 小时。')); box.append(choiceButtons([
+      {label:'1. 愿意',type:'ok',onClick:()=> confirmTwice(()=>sceneQ4(), sceneQ3)},
+      {label:'2. 不愿意',type:'danger',onClick:()=> confirmTwice(()=>{ score=60; sceneEndHorror('没关系我不怪你','我们感情不到位罢了。',score,3); }, sceneQ3)}
+    ])); mount(box); }
 
-    // Q5 前置确认栅栏
-    function sceneQ5Gate(){
-      document.body.classList.remove('horror-mode');
-      document.querySelector('.title').textContent = '最终试炼 · 点击确认开始';
-      const box = mk('div', {className:'panel'});
-      const tip = mk('p', {className:'subtitle'}, '此步骤将检验我们的友情强度。按下确认进入最终问题。');
-      const confirm = btn('确认开始', '', sceneQ5);
-      box.append(tip, confirm);
-      mount(box);
-    }
+    function sceneQ4(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='问题 4/5 · 如果我是女的，愿不愿意和我上床？'; const box=mk('div',{className:'panel'}); box.append(mk('p',{className:'subtitle'},'认真思考后再作答。')); box.append(choiceButtons([
+      {label:'1. 愿意',type:'ok',onClick:()=> confirmTwice(()=>sceneQ5Gate(), sceneQ4)},
+      {label:'2. 不愿意',type:'danger',onClick:()=> confirmTwice(()=>{ score=80; sceneEndHorror('我是不是给你脸了？','仪式终止。',score,4); }, sceneQ4)}
+    ])); mount(box); }
 
-    // Q5 最终问题（唯一按钮→艺术字）
-    function sceneQ5(){
-      document.body.classList.remove('horror-mode');
-      document.querySelector('.title').textContent = '最终问题 · 友情是否坚固？';
-      const box = mk('div', {className:'panel only-btn'});
-      const ask = mk('p', {className:'subtitle'}, '去叫我 10 声 爸爸，有意想不到的惊喜，我们的友谊是否坚固，就看你了。');
-      const go = btn('我现在就去叫', 'ok', sceneFinalWin);
-      box.append(ask, go);
-      mount(box);
-    }
+    function sceneQ5Gate(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='最终试炼 · 点击确认开始'; const box=mk('div',{className:'panel'}); const tip=mk('p',{className:'subtitle'},'此步骤将检验我们的友情强度。按下确认进入最终问题。'); const confirm=btn('确认开始','',()=> interlude(sceneQ5,'加载最终密钥…')); box.append(tip,confirm); mount(box); }
 
-    // 初始化
+    function sceneQ5(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='最终问题 · 友情是否坚固？'; const box=mk('div',{className:'panel only-btn'}); const ask=mk('p',{className:'subtitle'},'去叫我 10 声 爸爸，有意想不到的惊喜，我们的友谊是否坚固，就看你了。'); const go=btn('我现在就去叫','ok',()=> interlude(sceneFinalWin,'核验完成度 100%…')); box.append(ask,go); mount(box); }
+
     sceneStart();
   </script>
 </body>

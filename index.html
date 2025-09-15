@@ -58,34 +58,36 @@
     .ending{ padding: 10px 0 6px; font-weight:700; font-size: clamp(22px, 4.5vw, 36px); line-height:1.25; text-align:center; background: linear-gradient(180deg, #fff 20%, #b6eaff 80%); -webkit-background-clip:text; color:transparent; text-shadow: 0 8px 32px rgba(0,224,255,.25); }
     .ending small{ display:block; margin-top:8px; font-weight:500; font-size: 14px; color: var(--muted); }
 
-    /* ===== 恐怖结局 & 艺术字体样式（强化） ===== */
+    /* ===== 恐怖结局 & 艺术字体样式（更恐怖） ===== */
     body.horror-mode .bg{ background:
-      radial-gradient(1000px 500px at 50% -10%, rgba(255,0,54,.22), transparent 60%),
-      radial-gradient(800px 480px at 0% 110%, rgba(255,0,0,.22), transparent 60%),
+      radial-gradient(1000px 500px at 50% -10%, rgba(255,0,54,.28), transparent 60%),
+      radial-gradient(800px 480px at 0% 110%, rgba(255,0,0,.28), transparent 60%),
       linear-gradient(180deg,#070306,#0a0203); }
-    body.horror-mode .card{ border-color: rgba(255,0,54,.6); box-shadow: 0 12px 38px rgba(255,0,54,.35), 0 0 50px rgba(255,0,0,.22); animation: hshake .45s ease-in-out 1; }
-    @keyframes hshake{ 0%{transform:translateX(0)} 20%{transform:translateX(-2px)} 40%{transform:translateX(2px)} 60%{transform:translateX(-1px)} 80%{transform:translateX(1px)} 100%{transform:translateX(0)} }
-    body.horror-mode::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:3; background:
-      radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,.35) 90%),
-      repeating-linear-gradient(0deg, rgba(255,0,30,.08) 0 2px, rgba(0,0,0,0) 2px 4px);
-      animation: flick 1.2s steps(2,end) infinite; mix-blend-mode:multiply; }
-    @keyframes flick{ 0%,100%{opacity:.85; filter:hue-rotate(0)} 50%{opacity:1; filter:hue-rotate(-10deg) brightness(1.05)} }
-    .glitch{ position:relative; text-transform:uppercase; letter-spacing:.5px; filter: drop-shadow(0 0 10px rgba(255,0,40,.35)); }
+    body.horror-mode .card{ border-color: rgba(255,0,54,.7); box-shadow: 0 14px 44px rgba(255,0,54,.4), 0 0 60px rgba(255,0,0,.28); animation: hshake .55s cubic-bezier(.2,.9,.3,1.2) 1; }
+    @keyframes hshake{ 0%{transform:translateX(0)} 15%{transform:translateX(-3px)} 35%{transform:translateX(3px)} 55%{transform:translateX(-2px)} 75%{transform:translateX(2px)} 100%{transform:translateX(0)} }
+    body.horror-mode::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:4; background:
+      radial-gradient(ellipse at center, rgba(0,0,0,0) 35%, rgba(0,0,0,.5) 90%),
+      repeating-linear-gradient(0deg, rgba(255,0,30,.12) 0 2px, rgba(0,0,0,0) 2px 4px);
+      animation: flick 0.9s steps(2,end) infinite, pulse 1.8s ease-in-out infinite; mix-blend-mode:multiply; }
+    @keyframes pulse{ 0%,100%{opacity:.85} 50%{opacity:1} }
+    @keyframes flick{ 0%,100%{filter:contrast(1) hue-rotate(0)} 50%{filter:contrast(1.1) hue-rotate(-12deg) brightness(1.08)} }
+    .glitch{ position:relative; text-transform:uppercase; letter-spacing:.5px; filter: drop-shadow(0 0 18px rgba(255,0,40,.45)); animation: heartbeat 2.1s ease-in-out infinite; }
+    @keyframes heartbeat{ 0%, 100% { transform: scale(1)} 10% { transform: scale(1.04)} 20% { transform: scale(1)} 30% { transform: scale(1.06)} 40% { transform: scale(1)} }
     .glitch::before, .glitch::after{ content: attr(data-text); position:absolute; left:0; right:0; top:0; opacity:.95; mix-blend-mode:screen; }
-    .glitch::before{ color:#ff2a2a; transform:translate(1.2px,0); animation:gl1 1s infinite linear alternate-reverse; }
-    .glitch::after{ color:#00e0ff; transform:translate(-1.2px,0); animation:gl2 .95s infinite linear alternate; }
+    .glitch::before{ color:#ff2a2a; transform:translate(1.5px,0); animation:gl1 .9s infinite linear alternate-reverse; }
+    .glitch::after{ color:#00e0ff; transform:translate(-1.5px,0); animation:gl2 .85s infinite linear alternate; }
     @keyframes gl1{ 0%{clip-path: inset(0 0 80% 0)} 50%{clip-path: inset(20% 0 40% 0)} 100%{clip-path: inset(60% 0 0 0)} }
     @keyframes gl2{ 0%{clip-path: inset(60% 0 0 0)} 50%{clip-path: inset(20% 0 40% 0)} 100%{clip-path: inset(0 0 80% 0)} }
 
     .score{ display:inline-block; margin-top:10px; padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); font-weight:700; }
-    .art100{ font-family: Monoton, 'Black Ops One', Orbitron, sans-serif; font-size: clamp(28px, 8vw, 72px); line-height:1.05; letter-spacing:1px; text-align:center; background:linear-gradient(180deg,#fff,#a1e4ff 60%,#7b61ff); -webkit-background-clip:text; color:transparent; text-shadow: 0 12px 40px rgba(0,224,255,.35), 0 0 80px rgba(123,97,255,.25);}  
+    .art100{ font-family: Monoton, 'Black Ops One', Orbitron, sans-serif; font-size: clamp(28px, 8vw, 72px); line-height:1.05; letter-spacing:1px; text-align:center; background:linear-gradient(180deg,#fff,#a1e4ff 60%,#7b61ff); -webkit-background-clip:text; color:transparent; text-shadow: 0 12px 40px rgba(0,224,255,.35), 0 0 120px rgba(123,97,255,.38);}  
     .only-btn{ display:grid; gap:14px; justify-items:center; }
     .no-select{ -webkit-user-select:none; user-select:none; }
 
-    /* 粒子礼花层 */
-    #confetti{ position:fixed; inset:0; pointer-events:none; z-index:2; }
+    /* 粒子礼花 & 特效层 */
+    #confetti, #fx{ position:fixed; inset:0; pointer-events:none; z-index:3; }
 
-    /* ===== 过场等待：加载圈 + 进度条 ===== */
+    /* 过场等待 */
     .interlude{ display:grid; gap:14px; justify-items:center; padding:16px 0; }
     .loader{ width:42px; height:42px; border-radius:50%; border:3px solid rgba(255,255,255,.18); border-top-color: #aee9ff; animation: spin 1s linear infinite; filter: drop-shadow(0 0 10px rgba(0,224,255,.25)); }
     @keyframes spin{ to{ transform: rotate(360deg) } }
@@ -94,7 +96,7 @@
     @keyframes grow{ from{ width:0% } to{ width:100% } }
     .il-text{ color:#bfeaff; font-size:13px; opacity:.9; letter-spacing:.3px; }
 
-    /* ===== 双重确认（恐怖风） ===== */
+    /* 双重确认（恐怖风） */
     .confirm-box{ display:grid; gap:14px; justify-items:center; text-align:center; padding:8px 0 10px; }
     .confirm-title{ font-weight:800; font-size: clamp(18px, 3.6vw, 24px); letter-spacing:.5px; }
     .confirm-sub{ color:#ffb7b7; font-size:13px; opacity:.9; }
@@ -105,6 +107,7 @@
 </head>
 <body>
   <canvas id="confetti"></canvas>
+  <canvas id="fx"></canvas>
   <div class="bg" aria-hidden="true">
     <div class="stars"></div>
     <div class="grid"></div>
@@ -115,8 +118,8 @@
         <div class="brand" aria-label="友情勋章">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#7b61ff"/></linearGradient></defs>
-            <path d="M28 22c3-6 9-6 12-2l3 4 4-1c6 0 9 10 1 13l-7 3-3 5c-2 3-7 3-9-1l-2-4-5 1c-6 1-10-7-5-12l3-3 8-3z" fill="url(#g1)" opacity=".95"/>
-            <path d="M17 28l5-2m4-2l4-1m8 0l4 1m4 2l3 2" stroke="#bfeaff" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+          <path d="M28 22c3-6 9-6 12-2l3 4 4-1c6 0 9 10 1 13l-7 3-3 5c-2 3-7 3-9-1l-2-4-5 1c-6 1-10-7-5-12l3-3 8-3z" fill="url(#g1)" opacity=".95"/>
+          <path d="M17 28l5-2m4-2l4-1m8 0l4 1m4 2l3 2" stroke="#bfeaff" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
           </svg>
           <span>Brotherhood Protocol</span>
         </div>
@@ -133,6 +136,7 @@
   <script>
     const panel = document.getElementById('panel');
     const confettiCanvas = document.getElementById('confetti');
+    const fxCanvas = document.getElementById('fx');
 
     let lock = false; let score = 0;
 
@@ -154,41 +158,39 @@
     // ===== 过场等待：统一封装 =====
     function interlude(next, text){ const ms = 900 + Math.floor(Math.random()*700); const box = mk('div', {className:'panel interlude'}); const t = mk('div', {className:'il-text'}, text || '链接兄弟协议中…'); const spin = mk('div', {className:'loader'}); const bar = mk('div', {className:'bar'}); const fill = mk('i'); fill.style.setProperty('--t', ms+'ms'); bar.append(fill); box.append(spin, bar, t); mount(box); setTimeout(()=>{ next(); }, ms); }
 
-    // 音效+震动（恐怖结局/确认强化）
+    // ===== 音效 =====
     let audioCtx; function getCtx(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx }
-    function playHorrorFX(){ const ctx=getCtx(); const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; try{ navigator.vibrate && navigator.vibrate([120,60,120,60,80]); }catch(_){} if(!ctx || reduce) return; const t0=ctx.currentTime, dur=.45; const buffer=ctx.createBuffer(1, ctx.sampleRate*dur, ctx.sampleRate); const data=buffer.getChannelData(0); for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1) * (1 - i/data.length); } const noise=ctx.createBufferSource(); noise.buffer=buffer; const filt=ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=900; filt.Q.value=0.6; const g=ctx.createGain(); g.gain.setValueAtTime(0.35,t0); g.gain.exponentialRampToValueAtTime(0.01,t0+dur); noise.connect(filt).connect(g).connect(ctx.destination); noise.start(); noise.stop(t0+dur); const osc=ctx.createOscillator(); osc.type='triangle'; osc.frequency.setValueAtTime(120,t0); osc.frequency.exponentialRampToValueAtTime(50,t0+dur); const g2=ctx.createGain(); g2.gain.setValueAtTime(0.22,t0); g2.gain.exponentialRampToValueAtTime(0.01,t0+dur); osc.connect(g2).connect(ctx.destination); osc.start(); osc.stop(t0+dur); }
+    function playHorrorFX(){ const ctx=getCtx(); const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; try{ navigator.vibrate && navigator.vibrate([140,60,140,60,100]); }catch(_){} if(!ctx || reduce) return; const t0=ctx.currentTime, dur=.5; // 噪声
+      const buffer=ctx.createBuffer(1, ctx.sampleRate*dur, ctx.sampleRate); const data=buffer.getChannelData(0); for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1) * (1 - i/data.length); } const noise=ctx.createBufferSource(); noise.buffer=buffer; const filt=ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=850; filt.Q.value=0.8; const g=ctx.createGain(); g.gain.setValueAtTime(0.4,t0); g.gain.exponentialRampToValueAtTime(0.01,t0+dur); noise.connect(filt).connect(g).connect(ctx.destination); noise.start(); noise.stop(t0+dur); // 低频
+      const osc=ctx.createOscillator(); osc.type='sawtooth'; osc.frequency.setValueAtTime(100,t0); osc.frequency.exponentialRampToValueAtTime(45,t0+dur); const g2=ctx.createGain(); g2.gain.setValueAtTime(0.24,t0); g2.gain.exponentialRampToValueAtTime(0.01,t0+dur); osc.connect(g2).connect(ctx.destination); osc.start(); osc.stop(t0+dur); }
+    function playWinFX(){ const ctx=getCtx(); if(!ctx) return; const t0=ctx.currentTime; const o1=ctx.createOscillator(); const g1=ctx.createGain(); o1.type='sine'; o1.frequency.setValueAtTime(880,t0); o1.frequency.exponentialRampToValueAtTime(1320,t0+.25); g1.gain.setValueAtTime(0.0001,t0); g1.gain.exponentialRampToValueAtTime(0.25,t0+.02); g1.gain.exponentialRampToValueAtTime(0.0001,t0+.45); o1.connect(g1).connect(ctx.destination); o1.start(); o1.stop(t0+.5); try{ navigator.vibrate && navigator.vibrate([40,20,40]); }catch(_){} }
 
-    // 粒子礼花
-    const confetti = (()=>{ const c=confettiCanvas, ctx=c.getContext('2d'); const DPR=Math.max(1, Math.min(2, window.devicePixelRatio||1)); let w=0,h=0, parts=[], rafId=null, t0=0; function resize(){ const bb=c.getBoundingClientRect(); w=bb.width; h=bb.height; c.width=Math.floor(w*DPR); c.height=Math.floor(h*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);} window.addEventListener('resize',resize); resize(); function launch(){ parts=[]; const N=180; for(let i=0;i<N;i++){ parts.push({ x:w/2+(Math.random()-0.5)*60, y:h*0.35+(Math.random()-0.5)*40, vx:(Math.random()-0.5)*(4+Math.random()*4), vy:-(3+Math.random()*5), g:0.12+Math.random()*0.08, s:2+Math.random()*3, a:1, r:Math.random()*Math.PI, rot:(Math.random()-0.5)*0.2, shape:Math.random()<0.5?'rect':'circle' }); } if(rafId) cancelAnimationFrame(rafId); t0=performance.now(); draw(); } function draw(){ rafId=requestAnimationFrame(draw); ctx.clearRect(0,0,w,h); for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=p.rot; p.a*=0.995; ctx.globalAlpha=Math.max(0,Math.min(1,p.a)); ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); if(p.shape==='rect'){ ctx.fillRect(-p.s,-p.s,p.s*2,p.s*2);} else { ctx.beginPath(); ctx.arc(0,0,p.s,0,Math.PI*2); ctx.fill(); } ctx.restore(); } if(performance.now()-t0>3000){ cancelAnimationFrame(rafId); rafId=null; ctx.clearRect(0,0,w,h);} } return { launch }; })();
+    // ===== 画布工具（通用） =====
+    function setupCanvas(c){ const ctx=c.getContext('2d'); const DPR=Math.max(1, Math.min(2, window.devicePixelRatio||1)); function resize(){ const bb=c.getBoundingClientRect(); c.width=Math.floor(bb.width*DPR); c.height=Math.floor(bb.height*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);} window.addEventListener('resize',resize); resize(); return {ctx}; }
+    const conf = (()=>{ const {ctx} = setupCanvas(confettiCanvas); let parts=[], rafId=null, t0=0; function launch(bursts=3){ parts=[]; const W=confettiCanvas.width, H=confettiCanvas.height; for(let b=0;b<bursts;b++){ const cx = (W/(window.devicePixelRatio||1))/2 + (Math.random()-0.5)*120; const cy = (H/(window.devicePixelRatio||1))*0.35 + (Math.random()-0.5)*60; const N = 120; for(let i=0;i<N;i++){ const ang = Math.random()*Math.PI*2; const spd = 2+Math.random()*5; const shape = Math.random()<0.33?'rect':(Math.random()<0.5?'circle':'star'); parts.push({ x:cx, y:cy, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd-3, g:0.09+Math.random()*0.07, s:2+Math.random()*3, a:1, r:Math.random()*Math.PI, rot:(Math.random()-0.5)*0.25, shape }); } }
+        if(rafId) cancelAnimationFrame(rafId); t0=performance.now(); draw(); }
+      function star(ctx, r){ ctx.beginPath(); const spikes=5; const outer=r, inner=r*0.5; for(let i=0;i<spikes*2;i++){ const rad=(i*Math.PI)/spikes; const rr= i%2? inner: outer; ctx.lineTo(Math.cos(rad)*rr, Math.sin(rad)*rr);} ctx.closePath(); ctx.fill(); }
+      function draw(){ rafId=requestAnimationFrame(draw); const W=confettiCanvas.width, H=confettiCanvas.height; ctx.clearRect(0,0,W,H); ctx.save(); ctx.shadowBlur=8; ctx.shadowColor='rgba(255,255,255,.6)'; for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=p.rot; p.a*=0.996; ctx.globalAlpha = Math.max(0,Math.min(1,p.a)); ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); if(p.shape==='rect'){ ctx.fillRect(-p.s,-p.s,p.s*2,p.s*2);} else if(p.shape==='circle'){ ctx.beginPath(); ctx.arc(0,0,p.s,0,Math.PI*2); ctx.fill(); } else { star(ctx,p.s*1.4); } ctx.restore(); } ctx.restore(); if(performance.now()-t0>3800){ cancelAnimationFrame(rafId); rafId=null; ctx.clearRect(0,0,W,H);} }
+      return { launch };
+    })();
+
+    // ===== 恐怖血雾/血滴效果 =====
+    const bloodFX = (()=>{ const {ctx} = setupCanvas(fxCanvas); let drops=[], raf=null, t0=0; function burst(){ const W=fxCanvas.width, H=fxCanvas.height; drops=[]; const N=60; for(let i=0;i<N;i++){ drops.push({ x: (W/(window.devicePixelRatio||1))/2 + (Math.random()-0.5)*80, y: (H/(window.devicePixelRatio||1))*0.35 + (Math.random()-0.5)*40, vx:(Math.random()-0.5)*1.2, vy: -Math.random()*2, g: 0.18+Math.random()*0.1, r: 1.5+Math.random()*3, a: .9 }); }
+        if(raf) cancelAnimationFrame(raf); t0=performance.now(); draw(); }
+      function draw(){ raf=requestAnimationFrame(draw); const W=fxCanvas.width, H=fxCanvas.height; ctx.clearRect(0,0,W,H); for(const d of drops){ d.x+=d.vx; d.y+=d.vy; d.vy+=d.g; d.a*=0.992; ctx.globalAlpha=Math.max(0,d.a); ctx.fillStyle='rgba(200,0,20,1)'; ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2); ctx.fill(); }
+        // 血雾
+        const life = performance.now()-t0; ctx.globalAlpha = Math.max(0, 1 - life/1500); const grd = ctx.createRadialGradient(W*0.5,H*0.3,10, W*0.5,H*0.35, Math.max(W,H)*0.6); grd.addColorStop(0,'rgba(120,0,20,.25)'); grd.addColorStop(1,'rgba(120,0,20,0)'); ctx.fillStyle=grd; ctx.fillRect(0,0,W,H);
+        if(life>2500){ cancelAnimationFrame(raf); raf=null; ctx.clearRect(0,0,W,H); }
+      }
+      return { burst };
+    })();
 
     // ===== 双重确认（恐怖风） =====
-    function confirmTwice(thenDo, resumeScene){
-      // 第一次确认
-      document.body.classList.add('horror-mode');
-      playHorrorFX();
-      const box1 = document.createElement('div');
-      box1.className = 'panel confirm-box';
-      const t1 = document.createElement('div'); t1.className='ending glitch confirm-title'; t1.dataset.text='你是否确定这个选择？'; t1.textContent='你是否确定这个选择？';
-      const s1 = document.createElement('div'); s1.className='confirm-sub'; s1.textContent='谨慎：这是一次性试炼，返回可重想，继续将进入最终确认。';
-      const row1 = document.createElement('div'); row1.className='choices';
-      const yes1 = btn('继续','danger', ()=>{
-        // 第二次确认
-        playHorrorFX();
-        const box2 = document.createElement('div'); box2.className='panel confirm-box';
-        const t2 = document.createElement('div'); t2.className='ending glitch confirm-title'; t2.dataset.text='最后确认：不可撤回！'; t2.textContent='最后确认：不可撤回！';
-        const s2 = document.createElement('div'); s2.className='confirm-sub'; s2.textContent='再次确认后将锁定答案并执行后续流程。';
-        const row2 = document.createElement('div'); row2.className='choices';
-        const yes2 = btn('我确定','danger', ()=>{ interlude(()=>{ document.body.classList.remove('horror-mode'); thenDo(); }, '锁定选择…'); });
-        const no2 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); });
-        row2.append(yes2, no2); box2.append(t2, s2, row2); mount(box2);
-      });
-      const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); });
-      row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1);
-    }
+    function confirmTwice(thenDo, resumeScene){ document.body.classList.add('horror-mode'); playHorrorFX(); const box1 = document.createElement('div'); box1.className = 'panel confirm-box'; const t1 = document.createElement('div'); t1.className='ending glitch confirm-title'; t1.dataset.text='你是否确定这个选择？'; t1.textContent='你是否确定这个选择？'; const s1 = document.createElement('div'); s1.className='confirm-sub'; s1.textContent='谨慎：这是一次性试炼，返回可重想，继续将进入最终确认。'; const row1 = document.createElement('div'); row1.className='choices'; const yes1 = btn('继续','danger', ()=>{ playHorrorFX(); const box2 = document.createElement('div'); box2.className='panel confirm-box'; const t2 = document.createElement('div'); t2.className='ending glitch confirm-title'; t2.dataset.text='最后确认：不可撤回！'; t2.textContent='最后确认：不可撤回！'; const s2 = document.createElement('div'); s2.className='confirm-sub'; s2.textContent='再次确认后将锁定答案并执行后续流程。'; const row2 = document.createElement('div'); row2.className='choices'; const yes2 = btn('我确定','danger', ()=>{ interlude(()=>{ document.body.classList.remove('horror-mode'); thenDo(); }, '锁定选择…'); }); const no2 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row2.append(yes2, no2); box2.append(t2, s2, row2); mount(box2); }); const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1); }
 
-    function sceneEndHorror(text, sub, pts=0, stage=1){ document.body.classList.add('horror-mode'); const box = mk('div', {className:'panel'}); const big = mk('div', {className:'ending glitch no-select'}); big.dataset.text = text; big.textContent = text; box.append(big); if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub)); const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc); const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q); mount(box); playHorrorFX(); }
+    function sceneEndHorror(text, sub, pts=0, stage=1){ document.body.classList.add('horror-mode'); const box = mk('div', {className:'panel'}); const big = mk('div', {className:'ending glitch no-select'}); big.dataset.text = text; big.textContent = text; box.append(big); if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub)); const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc); const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q); mount(box); playHorrorFX(); bloodFX.burst(); }
 
-    function sceneFinalWin(){ document.body.classList.remove('horror-mode'); const box=mk('div',{className:'panel'}); const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！'); box.append(big); mount(box); confetti.launch(); }
+    function sceneFinalWin(){ document.body.classList.remove('horror-mode'); const box=mk('div',{className:'panel'}); const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！'); box.append(big); mount(box); conf.launch(4); playWinFX(); }
 
     // ===== 场景（题目树） =====
     function sceneStart(){ document.body.classList.remove('horror-mode'); score=0; const box=mk('div',{className:'panel'}); box.append(btn('确定','ok',()=> interlude(sceneQ1,'启动友情试炼…'))); mount(box); }

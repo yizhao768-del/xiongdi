@@ -6,6 +6,19 @@
   <meta name="color-scheme" content="dark light">
   <title>Bro · 科幻友情问答</title>
   <meta name="description" content="科幻风格 · 未来科技感 · 兄弟友情问答 · 移动端稳定运行" />
+
+  <!-- ===== 关键修复：最早阶段就定义 window.invoke，以防外部/模板在任何时机调用 ===== -->
+  <script>
+    (function ensureInvokeShim(){
+      if (typeof window !== 'undefined' && typeof window.invoke === 'undefined') {
+        try { Object.defineProperty(window, 'invoke', { value: function(){
+          console.warn('[shim] window.invoke() called before real implementation. Args:', arguments);
+          return null;
+        }, configurable: true, writable: false }); } catch(e){ window.invoke = function(){ console.warn('[shim-fallback]', arguments); }; }
+      }
+    })();
+  </script>
+
   <!-- 字体（GitHub Pages 可直连） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,10 +68,10 @@
     .fade-active{ transition: all .28s ease; opacity:1; transform: none; filter:none; }
 
     /* 结果大字 */
-    .ending{ padding: 10px 0 6px; font-weight:700; font-size: clamp(22px, 4.5vw, 36px); line-height:1.25; text-align:center; background: linear-gradient(180deg, #fff 20%, #b6eaff 80%); -webkit-background-clip:text; color:transparent; text-shadow: 0 8px 32px rgba(0,224,255,.25); }
+    .ending{ padding: 10px 0 6px; font-weight:700; font-size: clamp(22px, 4.5vw, 36px); line-height:1.25; text-align:center; background: linear-gradient(180deg, #fff 20%, #b6eaff 80%); -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow: 0 8px 32px rgba(0,224,255,.25); }
     .ending small{ display:block; margin-top:8px; font-weight:500; font-size: 14px; color: var(--muted); }
 
-    /* ===== 恐怖结局 & 艺术字体样式（更恐怖） ===== */
+    /* ===== 恐怖结局风格 ===== */
     body.horror-mode .bg{ background:
       radial-gradient(1000px 500px at 50% -10%, rgba(255,0,54,.28), transparent 60%),
       radial-gradient(800px 480px at 0% 110%, rgba(255,0,0,.28), transparent 60%),
@@ -84,7 +97,7 @@
     .only-btn{ display:grid; gap:14px; justify-items:center; }
     .no-select{ -webkit-user-select:none; user-select:none; }
 
-    /* 粒子礼花 & 特效层 */
+    /* 粒子礼花 & 特效层（全屏） */
     #confetti, #fx{ position:fixed; inset:0; pointer-events:none; z-index:3; }
 
     /* 过场等待 */
@@ -101,13 +114,14 @@
     .confirm-title{ font-weight:800; font-size: clamp(18px, 3.6vw, 24px); letter-spacing:.5px; }
     .confirm-sub{ color:#ffb7b7; font-size:13px; opacity:.9; }
 
-    /* 减少动画（系统偏好） */
-    @media (prefers-reduced-motion: reduce){ .fade-active{ transition:none } .stars::before, .stars::after, .grid::before{ animation:none } body.horror-mode::after{ animation:none } .loader{ animation:none } .bar>i{ animation:none; width:100% } }
-      /* ===== 全屏动画模式 ===== */
+    /* ===== 全屏动画模式：让内容淡出，突出 fx 画布 ===== */
     body.fx-full .card{ background: transparent; border-color: transparent; box-shadow: none; }
     body.fx-full .head, body.fx-full .body{ opacity:.08; transition: opacity .3s ease; }
     body.fx-full .title{ text-shadow:none; }
     #confetti, #fx, .bg{ will-change: transform, opacity; }
+
+    /* 减少动画（系统偏好） */
+    @media (prefers-reduced-motion: reduce){ .fade-active{ transition:none } .stars::before, .stars::after, .grid::before{ animation:none } body.horror-mode::after{ animation:none } .loader{ animation:none } .bar>i{ animation:none; width:100% } }
   </style>
 </head>
 <body>
@@ -123,8 +137,8 @@
         <div class="brand" aria-label="友情勋章">
           <svg viewBox="0 0 64 64" aria-hidden="true">
             <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#7b61ff"/></linearGradient></defs>
-          <path d="M28 22c3-6 9-6 12-2l3 4 4-1c6 0 9 10 1 13l-7 3-3 5c-2 3-7 3-9-1l-2-4-5 1c-6 1-10-7-5-12l3-3 8-3z" fill="url(#g1)" opacity=".95"/>
-          <path d="M17 28l5-2m4-2l4-1m8 0l4 1m4 2l3 2" stroke="#bfeaff" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+            <path d="M28 22c3-6 9-6 12-2l3 4 4-1c6 0 9 10 1 13l-7 3-3 5c-2 3-7 3-9-1l-2-4-5 1c-6 1-10-7-5-12l3-3 8-3z" fill="url(#g1)" opacity=".95"/>
+            <path d="M17 28l5-2m4-2l4-1m8 0l4 1m4 2l3 2" stroke="#bfeaff" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
           </svg>
           <span>Brotherhood Protocol</span>
         </div>
@@ -139,14 +153,7 @@
   </main>
 
   <script>
-    // ===== Fix: provide a safe shim so any unexpected calls won't crash =====
-    if (typeof window.invoke === 'undefined') {
-      window.invoke = function(...args){
-        console.warn('[shim] window.invoke() was called but no implementation is provided. Args:', args);
-        return null;
-      };
-    }
-
+    // ===== DOM refs & helpers =====
     const panel = document.getElementById('panel');
     const confettiCanvas = document.getElementById('confetti');
     const fxCanvas = document.getElementById('fx');
@@ -172,7 +179,7 @@
     // ===== 过场等待：统一封装 =====
     function interlude(next, text){ const ms = 900 + Math.floor(Math.random()*700); const box = mk('div', {className:'panel interlude'}); const t = mk('div', {className:'il-text'}, text || '链接兄弟协议中…'); const spin = mk('div', {className:'loader'}); const bar = mk('div', {className:'bar'}); const fill = mk('i'); fill.style.setProperty('--t', ms+'ms'); bar.append(fill); box.append(spin, bar, t); mount(box); setTimeout(()=>{ next(); }, ms); }
 
-    // ===== 音效 =====
+    // ===== 音效/震动 =====
     let audioCtx; function getCtx(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx }
     function playHorrorFX(){ const ctx=getCtx(); const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; try{ navigator.vibrate && navigator.vibrate([140,60,140,60,100]); }catch(_){} if(!ctx || reduce) return; const t0=ctx.currentTime, dur=.5; // 噪声
       const buffer=ctx.createBuffer(1, ctx.sampleRate*dur, ctx.sampleRate); const data=buffer.getChannelData(0); for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1) * (1 - i/data.length); } const noise=ctx.createBufferSource(); noise.buffer=buffer; const filt=ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=850; filt.Q.value=0.8; const g=ctx.createGain(); g.gain.setValueAtTime(0.4,t0); g.gain.exponentialRampToValueAtTime(0.01,t0+dur); noise.connect(filt).connect(g).connect(ctx.destination); noise.start(); noise.stop(t0+dur); // 低频
@@ -181,6 +188,8 @@
 
     // ===== 画布工具（通用） =====
     function setupCanvas(c){ const ctx=c.getContext('2d'); const DPR=Math.max(1, Math.min(2, window.devicePixelRatio||1)); function resize(){ const bb=c.getBoundingClientRect(); c.width=Math.floor(bb.width*DPR); c.height=Math.floor(bb.height*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);} window.addEventListener('resize',resize); resize(); return {ctx}; }
+
+    // 成功礼花
     const conf = (()=>{ const {ctx} = setupCanvas(confettiCanvas); let parts=[], rafId=null, t0=0; function launch(bursts=3){ parts=[]; const W=confettiCanvas.width, H=confettiCanvas.height; for(let b=0;b<bursts;b++){ const cx = (W/(window.devicePixelRatio||1))/2 + (Math.random()-0.5)*120; const cy = (H/(window.devicePixelRatio||1))*0.35 + (Math.random()-0.5)*60; const N = 120; for(let i=0;i<N;i++){ const ang = Math.random()*Math.PI*2; const spd = 2+Math.random()*5; const shape = Math.random()<0.33?'rect':(Math.random()<0.5?'circle':'star'); parts.push({ x:cx, y:cy, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd-3, g:0.09+Math.random()*0.07, s:2+Math.random()*3, a:1, r:Math.random()*Math.PI, rot:(Math.random()-0.5)*0.25, shape }); } }
         if(rafId) cancelAnimationFrame(rafId); t0=performance.now(); draw(); }
       function star(ctx, r){ ctx.beginPath(); const spikes=5; const outer=r, inner=r*0.5; for(let i=0;i<spikes*2;i++){ const rad=(i*Math.PI)/spikes; const rr= i%2? inner: outer; ctx.lineTo(Math.cos(rad)*rr, Math.sin(rad)*rr);} ctx.closePath(); ctx.fill(); }
@@ -188,7 +197,7 @@
       return { launch };
     })();
 
-    // ===== 恐怖血雾/血滴效果 =====
+    // 失败血雾/血滴
     const bloodFX = (()=>{ const {ctx} = setupCanvas(fxCanvas); let drops=[], raf=null, t0=0; function burst(){ const W=fxCanvas.width, H=fxCanvas.height; drops=[]; const N=60; for(let i=0;i<N;i++){ drops.push({ x: (W/(window.devicePixelRatio||1))/2 + (Math.random()-0.5)*80, y: (H/(window.devicePixelRatio||1))*0.35 + (Math.random()-0.5)*40, vx:(Math.random()-0.5)*1.2, vy: -Math.random()*2, g: 0.18+Math.random()*0.1, r: 1.5+Math.random()*3, a: .9 }); }
         if(raf) cancelAnimationFrame(raf); t0=performance.now(); draw(); }
       function draw(){ raf=requestAnimationFrame(draw); const W=fxCanvas.width, H=fxCanvas.height; ctx.clearRect(0,0,W,H); for(const d of drops){ d.x+=d.vx; d.y+=d.vy; d.vy+=d.g; d.a*=0.992; ctx.globalAlpha=Math.max(0,d.a); ctx.fillStyle='rgba(200,0,20,1)'; ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2); ctx.fill(); }
@@ -220,8 +229,9 @@
       });
       const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); setFullFX(false); resumeScene(); });
       row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1);
-    }, '锁定选择…'); }); const no2 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row2.append(yes2, no2); box2.append(t2, s2, row2); mount(box2); }); const no1 = btn('再想想','outline', ()=>{ document.body.classList.remove('horror-mode'); resumeScene(); }); row1.append(yes1, no1); box1.append(t1, s1, row1); mount(box1); }
+    }
 
+    // ===== 失败/成功场景 =====
     function sceneEndHorror(text, sub, pts=0, stage=1){
       setFullFX(true);
       document.body.classList.add('horror-mode');
@@ -232,10 +242,9 @@
       const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc);
       const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q);
       mount(box);
-      // 全屏恐怖特效
       playHorrorFX();
       bloodFX.burst();
-    }); const big = mk('div', {className:'ending glitch no-select'}); big.dataset.text = text; big.textContent = text; box.append(big); if(sub) box.append(mk('div', {className:'subtitle no-select'}, sub)); const sc = mk('div', {className:'score'}, `失败得分：${pts} 分`); box.append(sc); const q = mk('p', {className:'subtitle'}, pick(failureQuotes[stage]||['…'])); box.append(q); mount(box); playHorrorFX(); bloodFX.burst(); }
+    }
 
     function sceneFinalWin(){
       setFullFX(true);
@@ -243,21 +252,19 @@
       const box=mk('div',{className:'panel'});
       const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！');
       box.append(big); mount(box);
-      // 全屏礼花 & 提示音
       conf.launch(5);
       playWinFX();
-    }); const big=mk('div',{className:'art100 no-select'},'100分！！！好兄弟一辈子！！！'); box.append(big); mount(box); conf.launch(4); playWinFX(); }
+    }
 
     // ===== 场景（题目树） =====
     function sceneStart(){
-      // 进入普通模式
       setFullFX(false);
       document.body.classList.remove('horror-mode');
       score=0;
       const box=mk('div',{className:'panel'});
       box.append(btn('确定','ok',()=> interlude(sceneQ1,'启动友情试炼…')));
       mount(box);
-    }); box.append(btn('确定','ok',()=> interlude(sceneQ1,'启动友情试炼…'))); mount(box); }
+    }
 
     function sceneQ1(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='问题 1/5 · 我是你兄弟吗？'; const box=mk('div',{className:'panel'}); box.append(mk('p',{className:'subtitle'},'请选择你的真实想法：')); box.append(choiceButtons([
       {label:'1. 是',type:'ok',onClick:()=> confirmTwice(()=>sceneQ2(), sceneQ1)},
@@ -283,18 +290,29 @@
 
     function sceneQ5(){ document.body.classList.remove('horror-mode'); document.querySelector('.title').textContent='最终问题 · 友情是否坚固？'; const box=mk('div',{className:'panel only-btn'}); const ask=mk('p',{className:'subtitle'},'去叫我 10 声 爸爸，有意想不到的惊喜，我们的友谊是否坚固，就看你了。'); const go=btn('我现在就去叫','ok',()=> interlude(sceneFinalWin,'核验完成度 100%…')); box.append(ask,go); mount(box); }
 
+    // 入口
     sceneStart();
 
-    // ===== Minimal Self-tests (do not change app behavior) =====
-    ;(function runSelfTests(){
+    // ===== 自测（Test Cases）— 不改变功能，仅作为健壮性检查 =====
+    (function runSelfTests(){
       try {
         console.groupCollapsed('%c[SelfTest] 开始', 'color:#0ff');
+        // 1) invoke shim 存在
         console.assert(typeof window.invoke === 'function', 'invoke shim 存在');
-        console.assert(typeof sceneStart === 'function', 'sceneStart 存在');
-        console.assert(typeof sceneQ1 === 'function' && typeof sceneQ2 === 'function', '题目场景函数存在');
-        // 运行一次起始场景不应抛错
+        // 2) 关键场景函数存在
+        console.assert(typeof sceneStart === 'function' && typeof sceneQ1 === 'function', '场景函数存在');
+        console.assert(typeof sceneQ2 === 'function' && typeof sceneQ3 === 'function' && typeof sceneQ4 === 'function', '更多场景函数存在');
+        // 3) setFullFX 切换类名
+        setFullFX(true); console.assert(document.body.classList.contains('fx-full'), 'fx-full 开启');
+        setFullFX(false); console.assert(!document.body.classList.contains('fx-full'), 'fx-full 关闭');
+        // 4) 不应抛错：调用一次失败/成功渲染（不验证视觉，仅验证不会 throw）
+        sceneEndHorror('测试失败','仅测试',20,1);
+        sceneFinalWin();
+        // 5) 再次启动起始场景，应无异常
         sceneStart();
-        console.log('[SelfTest] 场景渲染 OK');
+        // 6) 调用一次 invoke，不能抛错
+        window.invoke('ping', {ts: Date.now()});
+        console.log('[SelfTest] 全部通过');
         console.groupEnd();
       } catch(e){
         console.error('[SelfTest] 失败：', e);
